@@ -1,8 +1,5 @@
 import dotenv from "dotenv";
 import express from "express";
-// import fs from 'fs';
-// import path from 'path';
-// import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 dotenv.config();
 
 // Import the routes
