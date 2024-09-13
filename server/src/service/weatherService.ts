@@ -8,7 +8,7 @@ interface Coordinates {
 }
 
 // TODO: Define a class for the Weather object
-class Weather {
+export class Weather {
   coord: {
     lon: number;
     lat: number;
@@ -97,9 +97,10 @@ class WeatherService {
     this.cityName = cityName;
   }
   // TODO: Create fetchLocationData method
-  // Will take a city name and return the coordinates
-  private async fetchLocationData(query: string): Promise<Coordinates> {
-    const geocodeQuery = this.buildGeocodeQuery(query);
+  // Fetch location data based on the city name or default city
+  private async fetchLocationData(city?: string): Promise<Coordinates> {
+    const cityName = city || this.cityName; // Use default if no city provided
+    const geocodeQuery = this.buildGeocodeQuery(cityName);
     const response = await fetch(geocodeQuery);
     const locationData = await response.json();
     return this.destructureLocationData(locationData[0]);
@@ -135,18 +136,18 @@ class WeatherService {
     return new Weather(data);
   }
   // TODO: Complete buildForecastArray method
-  private buildForecastArray(
-    currentWeather: Weather,
-    weatherData: any[]
-  ): any[] {
-    return weatherData.map((dataPoint: any) => ({
-      dateTime: new Date(dataPoint.dt * 1000), // Convert UNIX timestamp to JS Date object
-      temperature: dataPoint.main.temp, // Extract temperature
-      weatherDescription: dataPoint.weather[0].description, // Weather description
-      icon: dataPoint.weather[0].icon, // Weather icon
-      windSpeed: dataPoint.wind.speed, // Wind speed
-    }));
-  }
+  // private buildForecastArray(
+  //   currentWeather: Weather,
+  //   weatherData: any[]
+  // ): any[] {
+  //   return weatherData.map((dataPoint: any) => ({
+  //     dateTime: new Date(dataPoint.dt * 1000), // Convert UNIX timestamp to JS Date object
+  //     temperature: dataPoint.main.temp, // Extract temperature
+  //     weatherDescription: dataPoint.weather[0].description, // Weather description
+  //     icon: dataPoint.weather[0].icon, // Weather icon
+  //     windSpeed: dataPoint.wind.speed, // Wind speed
+  //   }));
+  // }
   // TODO: Complete getWeatherForCity method
   public async getWeatherForCity(city: string): Promise<Weather> {
     const coordinates = await this.fetchLocationData(city);
