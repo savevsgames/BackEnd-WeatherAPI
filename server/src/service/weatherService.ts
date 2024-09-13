@@ -84,15 +84,18 @@ export class Weather {
 class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
   private baseURL: string;
+  private baseURLGeo: string;
   private apiKey: string;
   private cityName: string;
 
   constructor(
     baseURL = "https://api.openweathermap.org/data/2.5",
+    baseURLGeo = "https://api.openweathermap.org/geo/1.0/direct",
     apiKey = process.env.WEATHER_API_KEY || "",
     cityName = "Toronto"
   ) {
     this.baseURL = baseURL;
+    this.baseURLGeo = baseURLGeo;
     this.apiKey = apiKey;
     this.cityName = cityName;
   }
@@ -101,10 +104,31 @@ class WeatherService {
   private async fetchLocationData(city?: string): Promise<Coordinates> {
     const cityName = city || this.cityName; // Use default if no city provided
     const geocodeQuery = this.buildGeocodeQuery(cityName);
-    const response = await fetch(geocodeQuery);
-    const locationData = await response.json();
-    return this.destructureLocationData(locationData[0]);
+    console.log("Geocode query:", geocodeQuery);
+
+    try {
+      const response = await fetch(geocodeQuery);
+      console.log("Response from fetch request:", response);
+
+      // Check for HTTP errors
+      if (!response.ok) {
+        throw new Error(`Error fetching location data: ${response.statusText}`);
+      }
+
+      const locationData = await response.json();
+      console.log("Location data from fetch request:", locationData);
+
+      if (!locationData || locationData.length === 0) {
+        throw new Error("No location data found for the specified city.");
+      }
+
+      return this.destructureLocationData(locationData[0]);
+    } catch (error) {
+      console.error("Fetch location error:", error);
+      throw new Error("Unable to fetch location data.");
+    }
   }
+
   // TODO: Create destructureLocationData method
   private destructureLocationData(locationData: Coordinates): Coordinates {
     return {
@@ -114,7 +138,7 @@ class WeatherService {
   }
   // TODO: Create buildGeocodeQuery method
   private buildGeocodeQuery(query: string): string {
-    const geocodeQuery = `${this.baseURL}/geo/1.0/direct?q=${query}&limit=1&appid=${this.apiKey}`;
+    const geocodeQuery = `${this.baseURLGeo}?q=${query}&limit=1&appid=${this.apiKey}`;
     return geocodeQuery;
   }
   // TODO: Create buildWeatherQuery method
@@ -151,6 +175,7 @@ class WeatherService {
   // TODO: Complete getWeatherForCity method
   public async getWeatherForCity(city: string): Promise<Weather> {
     const coordinates = await this.fetchLocationData(city);
+    console.log("Coordinates for the fetch request:", coordinates);
     return this.fetchWeatherData(coordinates);
   }
 }
