@@ -1,26 +1,26 @@
 [
   {
     "name": "Toronto",
-    "id": "0564fe55-8eba-491e-acd9-2f5d7962a50c",
+    "id": "ac0591d6-1a50-4770-aa4f-4f34f3e2c8e7",
     "lat": 43.6534817,
     "lon": -79.3839347
   },
   {
+    "name": "San Diego",
+    "id": "65778d43-61d6-4b10-978e-cf296429668f",
+    "lat": 32.7174202,
+    "lon": -117.1627728
+  },
+  {
     "name": "calgary",
-    "id": "f2b187dc-33fe-46cd-bc3a-15b0f83705e0",
+    "id": "e091abea-718a-4186-860d-fbdb3ee1b094",
     "lat": 51.0460954,
     "lon": -114.065465
   },
   {
-    "name": "Guelph",
-    "id": "c65ce1a4-1df4-4295-860c-d8fa1ccb7784",
-    "lat": 43.5460516,
-    "lon": -80.2493276
-  },
-  {
-    "name": "Toronto",
-    "id": "fec448b4-1b24-4d3b-afd4-8b0ad84a6d93",
-    "lat": 43.6534817,
-    "lon": -79.3839347
+    "name": "Cambridge",
+    "id": "30ae2850-ca9f-44d5-998a-90ec1ea29cfb",
+    "lat": 52.197584649999996,
+    "lon": 0.13915373736874398
   }
 ]

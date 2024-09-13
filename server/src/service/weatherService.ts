@@ -212,11 +212,12 @@ class WeatherService {
     forecastData.forEach((dataPoint: any) => {
       const nonISODate = new Date(dataPoint.dt * 1000); // Convert UNIX timestamp to JavaScript Date
       const hours = nonISODate.getUTCHours(); // Get hours (we can filter by hours)
-      const date = new Date(dataPoint.dt * 1000);
+      const date = nonISODate.toDateString(); // Get the date
       // Assume we take the forecast at midday (12 PM)
-      if (hours === 12) {
+      if (hours === 18) {
+        // console.log("Date:", date, "Hours:", hours);
         dailyForecast.push({
-          date: date.toLocaleDateString(), // Format as a readable date
+          date: date, // Format as a readable date
           icon: dataPoint.weather[0].icon, // Weather icon code
           iconDescription: dataPoint.weather[0].description, // Icon description
           tempF: Math.round((dataPoint.main.temp * 9) / 5 + 32), // Convert temperature to Fahrenheit

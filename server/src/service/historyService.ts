@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 // TODO: Define a City class with name and id properties
 // The city should also have optional lat and lon properties for future convenience
 // This is because the API query prefers the city's latitude and longitude to its name
-class City {
+export class City {
   name: string;
   id: string;
   lat?: number;
