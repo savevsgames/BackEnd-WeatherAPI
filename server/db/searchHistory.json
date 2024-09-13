@@ -1,14 +1,8 @@
 [
   {
-    "cityName": "toronto",
-    "id": "8e3b9643-480b-400d-b4c6-2ea27f121a4f",
-    "lat": 43.6535,
-    "lon": -79.3839
-  },
-  {
-    "cityName": "geulph",
-    "id": "197ecad5-c99e-4353-ad6a-f3d9d84ee92c",
-    "lat": 43.6532,
-    "lon": -79.3832
+    "name": "toronto",
+    "id": "188e77c9-e237-4420-bb1d-7adccb7547bc",
+    "lat": 43.6534817,
+    "lon": -79.3839347
   }
 ]

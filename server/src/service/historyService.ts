@@ -5,12 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 // The city should also have optional lat and lon properties for future convenience
 // This is because the API query prefers the city's latitude and longitude to its name
 class City {
-  cityName: string;
+  name: string;
   id: string;
   lat?: number;
   lon?: number;
-  constructor(cityName: string, id: string, lat?: number, lon?: number) {
-    this.cityName = cityName;
+  constructor(name: string, id: string, lat?: number, lon?: number) {
+    this.name = name;
     this.id = id;
     this.lat = lat !== undefined ? lat : 0;
     this.lon = lon !== undefined ? lon : 0;
@@ -30,7 +30,7 @@ class HistoryService {
       return fileData;
     } catch (error) {
       console.error("Error reading from cities array file:", error);
-      return "";
+      return "[]"; // Return an empty array if there is an error
     }
   }
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file

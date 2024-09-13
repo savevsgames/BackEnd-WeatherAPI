@@ -3,6 +3,7 @@ const router = Router();
 
 import HistoryService from "../../service/historyService.js";
 import WeatherService from "../../service/weatherService.js";
+// import { get } from "http";
 
 // TODO: POST Request with city name to retrieve weather data
 router.post("/", async (req, res) => {
@@ -16,26 +17,47 @@ router.post("/", async (req, res) => {
     }
     // WEATHER DATA FOUND
     console.log("Weather data found successfully: ", weatherData);
+    console.log("Current weather data: ", weatherData.currentWeather);
+    console.log("Forecast data: ", weatherData.forecast);
+    console.log("Greg's Weather Data Name: ", weatherData.currentWeather.city);
 
     // Prepare the currentWeather object to send back to the client
     const currentWeather = {
-      city: cityName,
-      date: new Date(weatherData.dt * 1000).toLocaleDateString(),
-      icon: weatherData.weather[0].icon,
-      iconDescription: weatherData.weather[0].description,
-      tempF: (weatherData.main.temp * 9) / 5 + 32, // Convert temperature to Fahrenheit
-      windSpeed: weatherData.wind.speed,
-      humidity: weatherData.main.humidity,
+      city: weatherData.currentWeather.city,
+      date: new Date(weatherData.currentWeather.dt * 1000).toLocaleDateString(),
+      icon: weatherData.currentWeather.icon,
+      iconDescription: weatherData.currentWeather.iconDescription,
+      tempF: weatherData.currentWeather.tempF,
+      windSpeed: weatherData.currentWeather.windSpeed,
+      humidity: weatherData.currentWeather.humidity,
     };
 
+    // Prepare the forecast array to send back to the client
+    const forecastData = weatherData.forecast.map((forecast: any) => ({
+      date: new Date(forecast.dt * 1000).toLocaleDateString(),
+      icon: forecast.icon,
+      iconDescription: forecast.iconDescription,
+      tempF: forecast.tempF,
+      windSpeed: forecast.windSpeed,
+      humidity: forecast.humidity,
+    }));
+    let coordinates;
+    try {
+      coordinates = await WeatherService.fetchLocationData(cityName);
+      console.log("Coordinates for the fetch request:", coordinates);
+    } catch (error) {
+      console.error("Error fetching location data:", error);
+      coordinates = { lat: 0, lon: 0 };
+    }
     // TODO: save city to search history
     await HistoryService.addCity(
       req.body.cityName,
-      weatherData.coord.lat,
-      weatherData.coord.lon
+      coordinates.lat,
+      coordinates.lon
     );
     console.log("City added to search history");
-    return res.json(weatherData);
+    // Send the currentWeather and forecastData back to the client
+    return res.json([currentWeather, ...forecastData]);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
