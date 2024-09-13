@@ -149,29 +149,60 @@ class WeatherService {
   // TODO: Create fetchAndDestructureLocationData method
   // private async fetchAndDestructureLocationData() {}
   // TODO: Create fetchWeatherData method
-  private async fetchWeatherData(coordinates: Coordinates): Promise<Weather> {
-    const weatherQuery = this.buildWeatherQuery(coordinates);
-    const response = await fetch(weatherQuery);
-    const weatherData = await response.json();
-    return this.parseCurrentWeather(weatherData);
+  // Create fetchWeatherData method for both current weather and forecast
+  private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
+    const weatherQuery = `${this.baseURL}/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}&units=metric`;
+    const forecastQuery = `${this.baseURL}/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}&units=metric`; // For 5-day forecast
+
+    try {
+      // Fetch current weather
+      const weatherResponse = await fetch(weatherQuery);
+      const currentWeather = await weatherResponse.json();
+
+      // Fetch forecast data
+      const forecastResponse = await fetch(forecastQuery);
+      const forecastData = await forecastResponse.json();
+
+      // Build the forecast array
+      const forecastArray = this.buildForecastArray(forecastData.list); // 'list' is the array containing forecast data
+
+      return { currentWeather, forecastArray };
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      throw new Error("Unable to fetch weather data.");
+    }
   }
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(data: any): Weather {
     return new Weather(data);
   }
   // TODO: Complete buildForecastArray method
-  // private buildForecastArray(
-  //   currentWeather: Weather,
-  //   weatherData: any[]
-  // ): any[] {
-  //   return weatherData.map((dataPoint: any) => ({
-  //     dateTime: new Date(dataPoint.dt * 1000), // Convert UNIX timestamp to JS Date object
-  //     temperature: dataPoint.main.temp, // Extract temperature
-  //     weatherDescription: dataPoint.weather[0].description, // Weather description
-  //     icon: dataPoint.weather[0].icon, // Weather icon
-  //     windSpeed: dataPoint.wind.speed, // Wind speed
-  //   }));
-  // }
+  // Build a forecast array for the 5-day forecast (daily)
+  private buildForecastArray(forecastData: any[]): any[] {
+    // Group forecast data into daily intervals
+    const dailyForecast: any[] = [];
+
+    // OpenWeather returns forecast data in 3-hour intervals, so we can filter for 1 forecast per day (e.g., midday).
+    // You can customize this filtering logic as needed.
+    forecastData.forEach((dataPoint: any) => {
+      const date = new Date(dataPoint.dt * 1000); // Convert UNIX timestamp to JavaScript Date
+      const hours = date.getUTCHours(); // Get hours (we can filter by hours)
+
+      // Assume we take the forecast at midday (12 PM)
+      if (hours === 12) {
+        dailyForecast.push({
+          date: date.toLocaleDateString(), // Format as a readable date
+          icon: dataPoint.weather[0].icon, // Weather icon code
+          iconDescription: dataPoint.weather[0].description, // Icon description
+          tempF: Math.round((dataPoint.main.temp * 9) / 5 + 32), // Convert temperature to Fahrenheit
+          windSpeed: dataPoint.wind.speed, // Wind speed
+          humidity: dataPoint.main.humidity, // Humidity
+        });
+      }
+    });
+
+    return dailyForecast;
+  }
   // TODO: Complete getWeatherForCity method
   public async getWeatherForCity(city: string): Promise<Weather> {
     const coordinates = await this.fetchLocationData(city);
