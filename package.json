@@ -12,7 +12,7 @@
     "client:build": "cd client && npm run build",
     "client:dev": "cd client && npm run dev",
     "build": "cd client && npm run build",
-    "render-build": "npm install && npm run build"
+    "render-build": "npm install && cd client && npm install typescript --save-dev && npm run build"
   },
   "keywords": [],
   "author": "",
