@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     // Prepare the currentWeather object to send back to the client
     const currentWeather = {
       city: weatherData.currentWeather.city,
-      date: new Date(weatherData.currentWeather.dt * 1000).toLocaleDateString(),
+      date: weatherData.currentWeather.date,
       icon: weatherData.currentWeather.icon,
       iconDescription: weatherData.currentWeather.iconDescription,
       tempF: weatherData.currentWeather.tempF,
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
 
     // Prepare the forecast array to send back to the client
     const forecastData = weatherData.forecast.map((forecast: any) => ({
-      date: new Date(forecast.dt * 1000).toLocaleDateString(),
+      date: forecast.date,
       icon: forecast.icon,
       iconDescription: forecast.iconDescription,
       tempF: forecast.tempF,

@@ -11,6 +11,7 @@ interface Coordinates {
 interface ParsedWeather {
   city: string;
   date: string;
+  dt: number;
   tempF: number;
   windSpeed: number;
   humidity: number;
@@ -191,6 +192,7 @@ class WeatherService {
     return {
       city: data.name, // The city name
       date: new Date(data.dt * 1000).toLocaleDateString(), // Convert UNIX timestamp to a readable date
+      dt: data.dt,
       tempF: data.main.temp, // Convert temperature from Celsius to Fahrenheit
       windSpeed: data.wind.speed, // Wind speed in mph or m/s, depending on API settings
       humidity: data.main.humidity, // Humidity percentage
@@ -208,9 +210,9 @@ class WeatherService {
     // OpenWeather returns forecast data in 3-hour intervals, so we can filter for 1 forecast per day (e.g., midday).
     // You can customize this filtering logic as needed.
     forecastData.forEach((dataPoint: any) => {
-      const date = new Date(dataPoint.dt * 1000); // Convert UNIX timestamp to JavaScript Date
-      const hours = date.getUTCHours(); // Get hours (we can filter by hours)
-
+      const nonISODate = new Date(dataPoint.dt * 1000); // Convert UNIX timestamp to JavaScript Date
+      const hours = nonISODate.getUTCHours(); // Get hours (we can filter by hours)
+      const date = new Date(dataPoint.dt * 1000);
       // Assume we take the forecast at midday (12 PM)
       if (hours === 12) {
         dailyForecast.push({
