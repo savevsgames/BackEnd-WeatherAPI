@@ -80,7 +80,9 @@ router.post("/", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ message: "Internal server error. The city could not be found." });
   }
 });
 

@@ -9,7 +9,7 @@ const router = Router();
 try {
   console.log("Serving index.html");
   router.get("/", (_req, res) => {
-    res.sendFile(path.join(__dirname, "../../../client/dist/index.html"));
+    res.sendFile(path.resolve(__dirname, "../../client/dist/index.html"));
   });
 } catch (error) {
   console.log(error);
