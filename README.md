@@ -29,7 +29,7 @@ The Weather Dashboard API is a full-stack web application that provides current 
 This app is deployed on [Render](https://render.com/) and can be accessed live at:  
 **[Weather Dashboard API on Render](https://backend-weatherapi-3.onrender.com/)**
 
-![Weather Dashboard Screenshot](link-to-screenshot)
+![Weather Dashboard Screenshot](./readme_assets/app_screenshot.png)
 
 ## Installation Instructions
 
