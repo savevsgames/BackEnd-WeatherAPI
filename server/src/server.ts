@@ -1,15 +1,15 @@
 import dotenv from "dotenv";
 import express from "express";
-import path from "path";
-import { fileURLToPath } from "url"; // Import this to handle ES modules
+// import path from "node:path";
+// import { fileURLToPath } from "node:url"; // Import this to handle ES modules
 dotenv.config();
 
 // Import the routes
 import routes from "./routes/index.js";
 
 // Resolve __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3001;
 // TODO: Implement middleware for parsing JSON and urlencoded form data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.resolve(__dirname, "../../../client/dist")));
+app.use(express.static("../client/dist"));
 
 // TODO: Implement middleware to connect the routes
 app.use(routes);
