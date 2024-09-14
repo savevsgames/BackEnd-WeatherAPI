@@ -213,8 +213,8 @@ class WeatherService {
       const nonISODate = new Date(dataPoint.dt * 1000); // Convert UNIX timestamp to JavaScript Date
       const hours = nonISODate.getUTCHours(); // Get hours (we can filter by hours)
       const date = nonISODate.toDateString(); // Get the date
-      // Assume we take the forecast at midday (12 PM)
-      if (hours === 12) {
+      // Assume we take the forecast at midday (6 PM)
+      if (hours === 18) {
         // console.log("Date:", date, "Hours:", hours);
         dailyForecast.push({
           date: date, // Format as a readable date
