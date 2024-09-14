@@ -214,7 +214,7 @@ class WeatherService {
       const hours = nonISODate.getUTCHours(); // Get hours (we can filter by hours)
       const date = nonISODate.toDateString(); // Get the date
       // Assume we take the forecast at midday (12 PM)
-      if (hours === 18) {
+      if (hours === 12) {
         // console.log("Date:", date, "Hours:", hours);
         dailyForecast.push({
           date: date, // Format as a readable date
